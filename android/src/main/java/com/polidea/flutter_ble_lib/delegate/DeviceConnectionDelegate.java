@@ -48,7 +48,7 @@ public class DeviceConnectionDelegate extends CallDelegate {
 
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-        String deviceId = call.argument(ArgumentKey.DEVICE_IDENTIFIER);
+        final String deviceId = call.argument(ArgumentKey.DEVICE_IDENTIFIER);
         switch (call.method) {
             case MethodName.CONNECT_TO_DEVICE:
                 //make sure connection happens in main thread
