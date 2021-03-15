@@ -52,16 +52,17 @@ public class DeviceConnectionDelegate extends CallDelegate {
         switch (call.method) {
             case MethodName.CONNECT_TO_DEVICE:
                 //make sure connection happens in main thread
-                Log.e("PQD", "connected to device");
-                new Handler(Looper.getMainLooper()).post(new Runnable () {
+                Log.e("PQD", "connected to device in UI Thread");
+                runOnUiThread(new Runnable() {
                     @Override
-                    public void run () {
+                    public void run() {
                         connectToDevice(deviceId,
                                 call.<Boolean>argument(ArgumentKey.IS_AUTO_CONNECT),
                                 call.<Integer>argument(ArgumentKey.REQUEST_MTU),
                                 call.<Boolean>argument(ArgumentKey.REFRESH_GATT),
                                 getLongArgument(call, ArgumentKey.TIMEOUT_MILLIS),
                                 result);
+
                     }
                 });
                 return;
@@ -95,7 +96,7 @@ public class DeviceConnectionDelegate extends CallDelegate {
         }
     }
 
-    private void connectToDevice(final String deviceId, Boolean isAutoConnect, Integer requestMtu, Boolean refreshGatt, Long timeoutMillis, @NonNull final MethodChannel.Result result) {
+    private void (final String deviceId, Boolean isAutoConnect, Integer requestMtu, Boolean refreshGatt, Long timeoutMillis, @NonNull final MethodChannel.Result result) {
         RefreshGattMoment refreshGattMoment = null;
         if (refreshGatt) refreshGattMoment = RefreshGattMoment.ON_CONNECTED;
 
@@ -108,7 +109,7 @@ public class DeviceConnectionDelegate extends CallDelegate {
                 },
                 new OnErrorCallback() {
                     @Override
-                    public void onError(BleError error) {
+                    public void onError(BleError error) {connectToDevice
                         result.error(String.valueOf(error.errorCode.code), error.reason, bleErrorJsonConverter.toJson(error));
                     }
                 });
