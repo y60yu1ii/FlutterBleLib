@@ -48,23 +48,15 @@ public class DeviceConnectionDelegate extends CallDelegate {
 
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-        final String deviceId = call.argument(ArgumentKey.DEVICE_IDENTIFIER);
+        String deviceId = call.argument(ArgumentKey.DEVICE_IDENTIFIER);
         switch (call.method) {
             case MethodName.CONNECT_TO_DEVICE:
-                //make sure connection happens in main thread
-                Log.e("PQD", "connected to device in UI Thread");
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        connectToDevice(deviceId,
+                connectToDevice(deviceId,
                                 call.<Boolean>argument(ArgumentKey.IS_AUTO_CONNECT),
                                 call.<Integer>argument(ArgumentKey.REQUEST_MTU),
                                 call.<Boolean>argument(ArgumentKey.REFRESH_GATT),
                                 getLongArgument(call, ArgumentKey.TIMEOUT_MILLIS),
                                 result);
-
-                    }
-                });
                 return;
             case MethodName.IS_DEVICE_CONNECTED:
                 isDeviceConnected(deviceId, result);
